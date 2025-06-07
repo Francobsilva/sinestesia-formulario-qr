@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinestesia - Formulario con Video</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #ff0080, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #ff0080, #ff6b6b);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .video-upload {
+            border: 2px dashed rgba(255, 107, 107, 0.5);
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-upload:hover {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .video-upload.dragover {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff0080, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .qr-container {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .qr-code {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .share-btn.copy {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .success-message {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .video-preview {
+            max-width: 100%;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">SINESTESIA</div>
+            <div class="subtitle">Comparte tu estilo con nosotros</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('formulario')">
+                📝 Formulario
+            </div>
+            <div class="tab" onclick="showTab('qr')">
+                📱 Generar QR
+            </div>
+        </div>
+
+        <!-- TAB: FORMULARIO -->
+        <div id="formulario" class="tab-content active">
+            <form id="sinestesiaForm">
+                <div class="form-group">
+                    <label for="nombre">👤 Nombre Completo</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">📧 Email</label>
+                    <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">📱 Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="+54 9 11 1234-5678">
+                </div>
+
+                <div class="form-group">
+                    <label for="edad">🎂 Edad</label>
+                    <input type="number" id="edad" name="edad" min="13" max="100" placeholder="Tu edad">
+                </div>
+
+                <div class="form-group">
+                    <label for="ciudad">🏙️ Ciudad</label>
+                    <input type="text" id="ciudad" name="ciudad" placeholder="Tu ciudad">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">✨ ¿Qué te representa más?</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="streetwear">🔥 Streetwear</option>
+                        <option value="minimal">⚪ Minimal</option>
+                        <option value="bold">💥 Bold & Colorful</option>
+                        <option value="vintage">📼 Vintage</option>
+                        <option value="futuristic">🚀 Futuristic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">💭 Cuéntanos sobre tu estilo</label>
+                    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Describe tu estilo personal, qué te inspira, cómo te gusta vestirte..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>🎬 Sube tu Video</label>
+                    <div class="video-upload" id="videoUpload">
+                        <div id="uploadText">
+                            <h3>📹 Arrastra tu video aquí</h3>
+                            <p>o haz clic para seleccionar</p>
+                            <small>Formatos: MP4, MOV, AVI (máx. 50MB)</small>
+                        </div>
+                        <input type="file" id="videoFile" accept="video/*" style="display: none;">
+                        <video id="videoPreview" class="video-preview" controls style="display: none;"></video>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 Enviar Mi Estilo
+                </button>
+
+                <div id="successMessage" class="success-message">
+                    <h3>🎉 ¡Formulario Enviado!</h3>
+                    <p>Gracias por compartir tu estilo con Sinestesia</p>
+                </div>
+            </form>
+        </div>
+
+        <!-- TAB: GENERAR QR -->
+        <div id="qr" class="tab-content">
+            <div class="qr-container">
+                <h2>📱 Código QR del Formulario</h2>
+                <p>Comparte este QR para que otros accedan al formulario</p>
+                
+                <div class="qr-code">
+                    <canvas id="qrCanvas"></canvas>
+                </div>
+
+                <div class="share-buttons">
+                    <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+                        📱 WhatsApp
+                    </button>
+                    <button class="share-btn copy" onclick="copyURL()">
+                        📋 Copiar Link
+                    </button>
+                    <button class="share-btn copy" onclick="downloadQR()">
+                        💾 Descargar QR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN - Cambia estos valores por los tuyos
+        const CONFIG = {
+            // EmailJS (recomendado - gratuito hasta 200 emails/mes)
+            emailjs: {
+                serviceId: 'TU_SERVICE_ID',  // Cambiar por tu Service ID
+                templateId: 'TU_TEMPLATE_ID', // Cambiar por tu Template ID
+                userId: 'TU_USER_ID'          // Cambiar por tu User ID
+            },
+            
+            // Webhook de TiendaNube (si tienes)
+            webhook: 'https://tu-webhook-url.com/endpoint',
+            
+            // Email donde recibirás los formularios
+            targetEmail: 'tu@email.com'
+        };
+
+        // Variables globales
+        let currentVideoFile = null;
+        const currentURL = window.location.href.split('?')[0];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar EmailJS
+            emailjs.init(CONFIG.emailjs.userId);
+            
+            generateQR();
+            setupVideoUpload();
+            setupForm();
+        });
+
+        // Función para cambiar tabs
+        function showTab(tabName) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar tab seleccionado
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Generar QR si se selecciona esa tab
+            if (tabName === 'qr') {
+                generateQR();
+            }
+        }
+
+        // Generar código QR
+        function generateQR() {
+            const canvas = document.getElementById('qrCanvas');
+            QRCode.toCanvas(canvas, currentURL, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (error) {
+                if (error) console.error(error);
+            });
+        }
+
+        // Configurar upload de video
+        function setupVideoUpload() {
+            const uploadArea = document.getElementById('videoUpload');
+            const fileInput = document.getElementById('videoFile');
+            const preview = document.getElementById('videoPreview');
+            const uploadText = document.getElementById('uploadText');
+
+            // Click para seleccionar archivo
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            // Drag & Drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleVideoFile(files[0]);
+                }
+            });
+
+            // Selección de archivo
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleVideoFile(e.target.files[0]);
+                }
+            });
+        }
+
+        // Manejar archivo de video
+        function handleVideoFile(file) {
+            if (!file.type.startsWith('video/')) {
+                alert('❌ Por favor selecciona un archivo de video válido');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) { // 50MB
+                alert('❌ El archivo es muy grande. Máximo 50MB');
+                return;
+            }
+
+            currentVideoFile = file;
+            
+            // Mostrar preview
+            const preview = document.getElementById('videoPreview');
+            const uploadText = document.getElementById('uploadText');
+            
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            uploadText.innerHTML = `
+                <h3>✅ Video Cargado</h3>
+                <p>${file.name}</p>
+                <small>Haz clic para cambiar el video</small>
+            `;
+        }
+
+        // Configurar formulario
+        function setupForm() {
+            const form = document.getElementById('sinestesiaForm');
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        // Enviar formulario
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Deshabilitar botón
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Enviando...';
+
+            // Recopilar datos del formulario
+            const datos = {
+                nombre: form.nombre.value,
+                email: form.email.value,
+                telefono: form.telefono.value,
+                edad: form.edad.value,
+                ciudad: form.ciudad.value,
+                categoria: form.categoria.value,
+                mensaje: form.mensaje.value,
+                video_nombre: currentVideoFile?.name || 'No se subió video',
+                fecha: new Date().toLocaleString('es-AR')
+            };
+
+            try {
+                // Enviar usando EmailJS
+                await emailjs.send(
+                    CONFIG.emailjs.serviceId,
+                    CONFIG.emailjs.templateId,
+                    {
+                        to_email: CONFIG.targetEmail,
+                        from_name: datos.nombre,
+                        from_email: datos.email,
+                        message: `
+                            📝 NUEVO FORMULARIO SINESTESIA
+                            
+                            👤 Nombre: ${datos.nombre}
+                            📧 Email: ${datos.email}
+                            📱 Teléfono: ${datos.telefono}
+                            🎂 Edad: ${datos.edad}
+                            🏙️ Ciudad: ${datos.ciudad}
+                            ✨ Categoría: ${datos.categoria}
+                            💭 Mensaje: ${datos.mensaje}
+                            🎬 Video: ${datos.video_nombre}
+                            📅 Fecha: ${datos.fecha}
+                        `
+                    }
+                );
+
+                // Mostrar mensaje de éxito
+                showSuccess();
+
+            } catch (error) {
+                console.error('Error enviando formulario:', error);
+                alert('❌ Error al enviar el formulario. Por favor, intenta de nuevo.');
+            } finally {
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '🚀 Enviar Mi Estilo';
+            }
+        }
+
+        // Mostrar mensaje de éxito
+        function showSuccess() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Scroll al mensaje
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+
+            // Limpiar formulario después de 5 segundos
+            setTimeout(() => {
+                resetForm();
+            }, 5000);
+        }
+
+        // Limpiar formulario
+        function resetForm() {
+            document.getElementById('sinestesiaForm').reset();
+            currentVideoFile = null;
+            document.getElementById('videoPreview').style.display = 'none';
+            document.getElementById('uploadText').innerHTML = `
+                <h3>📹 Arrastra tu video aquí</h3>
+                <p>o haz clic para seleccionar</p>
+                <small>Formatos: MP4, MOV, AVI (máx. 50MB)</small>
+            `;
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Funciones de compartir
+        function shareWhatsApp() {
+            const message = `🔥 ¡Comparte tu estilo con Sinestesia! ${currentURL}`;
+            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        function copyURL() {
+            navigator.clipboard.writeText(currentURL).then(() => {
+                alert('✅ ¡Link copiado al portapapeles!');
+            }).catch(() => {
+                // Fallback para navegadores antiguos
+                const textArea = document.createElement('textarea');
+                textArea.value = currentURL;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ ¡Link copiado al portapapeles!');
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.getElementById('qrCanvas');
+            const link = document.createElement('a');
+            link.download = 'sinestesia-qr.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html> 

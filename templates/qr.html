@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINESTESIA - Código QR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.4;
+            min-height: 100vh;
+        }
+
+        /* Banner animado */
+        .banner {
+            background: #000000;
+            color: #ffffff;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .banner-text {
+            display: inline-block;
+            animation: scroll 30s linear infinite;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .banner-text img {
+            height: 20px;
+            width: auto;
+            filter: invert(1);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Navegación */
+        .nav {
+            background: #000000;
+            padding: 20px 0;
+            border-bottom: 1px solid #333333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: invert(1);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 300;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 60px 40px;
+            background: #ffffff;
+            color: #000000;
+            text-align: center;
+        }
+
+        h1 {
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #666666;
+            margin-bottom: 40px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* QR Code */
+        .qr-section {
+            padding: 40px;
+            background: #f8f8f8;
+            margin-bottom: 30px;
+        }
+
+        .qr-section img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .qr-url {
+            background: #f0f0f0;
+            padding: 15px;
+            border: 1px solid #cccccc;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666666;
+            word-break: break-all;
+            margin-top: 20px;
+        }
+
+        /* Botón */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 40px 20px;
+                padding: 40px 20px;
+            }
+
+            .nav-container {
+                padding: 0 20px;
+            }
+
+            .nav-menu {
+                gap: 20px;
+            }
+
+            .nav-menu a {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Banner animado -->
+    <div class="banner">
+        <div class="banner-text">
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+        </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="#">Productos</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Código QR</h1>
+        <p class="subtitle">Escanea para acceder al formulario</p>
+
+        <div class="qr-section">
+            <img src="data:image/png;base64,{{ qr_image }}" alt="Código QR">
+            <div class="qr-url">{{ qr_url }}</div>
+        </div>
+
+        <a href="/" class="btn">Volver al formulario</a>
+    </div>
+</body>
+</html> 

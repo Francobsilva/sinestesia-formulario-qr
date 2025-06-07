@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINESTESIA - Formulario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.4;
+            min-height: 100vh;
+        }
+
+        /* Banner animado */
+        .banner {
+            background: #000000;
+            color: #ffffff;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .banner-text {
+            display: inline-block;
+            animation: scroll 30s linear infinite;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .banner-text img {
+            height: 20px;
+            width: auto;
+            filter: invert(1);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Navegación */
+        .nav {
+            background: #000000;
+            padding: 20px 0;
+            border-bottom: 1px solid #333333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: invert(1);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 300;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        /* Contenedor de video intro */
+        .video-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            overflow: hidden;
+        }
+
+        .video-intro.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .video-intro video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Audio activation overlay */
+        .audio-activation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .audio-activation-content {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .audio-button {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 20px 40px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .audio-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .video-placeholder {
+            color: #ffffff;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+
+
+
+
+        /* Contenedor principal */
+        .container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 60px 40px;
+            background: #ffffff;
+            color: #000000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .container.visible {
+            opacity: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 50px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* Formulario */
+        .form-section {
+            margin-top: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #000000;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cccccc;
+            background: #ffffff;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        /* Botón */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Mensaje de éxito */
+        .success-message {
+            background: #f0f8f0;
+            color: #2d5a2d;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #c8e6c8;
+            font-size: 14px;
+        }
+
+        /* Enlace para generar QR */
+        .qr-link {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .qr-link a {
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-link a:hover {
+            opacity: 0.6;
+        }
+
+        /* Mobile First - Optimizado para celular */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px 10px;
+                padding: 30px 20px;
+                max-width: 100%;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .nav-menu a {
+                font-size: 11px;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .banner-text img {
+                height: 15px;
+            }
+
+            .banner-text {
+                font-size: 12px;
+            }
+
+            .audio-button {
+                padding: 15px 30px;
+                font-size: 14px;
+            }
+
+
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video de introducción -->
+    <div class="video-intro" id="videoIntro">
+        <!-- Video element que ocupa toda la pantalla -->
+        <video id="introVideoElement" 
+               style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;" 
+               playsinline
+               onended="showForm()"
+               preload="metadata"
+               muted
+               webkit-playsinline
+               x-webkit-airplay="allow">
+            Tu navegador no soporta video HTML5.
+        </video>
+        
+        <!-- Password prompt overlay -->
+        <div class="audio-activation" id="audioActivation" style="display: flex;" onclick="enableAudioAndPlay()">
+            <div class="audio-activation-content">
+                <div style="margin-bottom: 30px;">
+                    <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" 
+                         alt="SINESTESIA" 
+                         style="height: 60px; width: auto; filter: invert(1);">
+                </div>
+                <p style="font-size: 16px; opacity: 0.9; margin-bottom: 30px;">Toca la pantalla para introducir la contraseña</p>
+                <button class="audio-button" onclick="enableAudioAndPlay()">
+                    TOCAR PANTALLA
+                </button>
+            </div>
+        </div>
+        
+
+    </div>
+
+    <!-- Banner animado -->
+    <div class="banner">
+        <div class="banner-text">
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+            <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            <span>SINESTESIA</span>
+        </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="https://d22fxaf9t8d39k.cloudfront.net/48819ad8219c5078127b7f80ea5b718babd2d01fba63b6b489fe0d83aac545fc187346.png" alt="SINESTESIA">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Productos</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Formulario de Contacto</h1>
+        <p class="subtitle">Completa tus datos y adjunta tu contenido visual</p>
+
+        {% if success %}
+            <div class="success-message">
+                Formulario enviado exitosamente. Gracias por contactarnos.
+            </div>
+        {% endif %}
+
+        <!-- Formulario -->
+        <form method="POST" enctype="multipart/form-data" class="form-section">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" placeholder="Describe tu proyecto o consulta"></textarea>
+            </div>
+
+            <button type="submit" class="btn">Enviar Formulario</button>
+        </form>
+
+        <!-- Enlace para generar QR -->
+        <div class="qr-link">
+            <a href="/qr">Generar código QR para este formulario</a>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let videoElement;
+        let audioActivated = false;
+        
+        // Función para mostrar el formulario cuando termina el video
+        function showForm() {
+            const videoIntro = document.getElementById('videoIntro');
+            const container = document.querySelector('.container');
+            
+            videoIntro.classList.add('hidden');
+            container.classList.add('visible');
+            
+            // Remover el video intro después de la transición
+            setTimeout(() => {
+                videoIntro.style.display = 'none';
+            }, 500);
+        }
+
+        // Función para activar "contraseña" y reproducir video desde el inicio
+        function enableAudioAndPlay() {
+            const audioActivation = document.getElementById('audioActivation');
+            
+            // Ocultar overlay de contraseña
+            audioActivation.style.display = 'none';
+            
+            // Pausar la reproducción silenciosa actual
+            videoElement.pause();
+            
+            // Reiniciar el video desde el principio
+            videoElement.currentTime = 0;
+            
+            // Activar audio
+            videoElement.muted = false;
+            audioActivated = true;
+            
+            // Pequeña pausa para transición suave
+            setTimeout(() => {
+                // Reproducir video desde el inicio con audio
+                videoElement.play().then(() => {
+                    console.log('Video reproduciéndose desde el inicio con audio');
+                }).catch((error) => {
+                    console.log('Error al reproducir video:', error);
+                    // Si falla, mostrar formulario
+                    showForm();
+                });
+            }, 200); // 200ms de pausa para transición suave
+        }
+
+        // Detectar si es dispositivo móvil
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Detectar conexión lenta
+        function isSlowConnection() {
+            return navigator.connection && 
+                   (navigator.connection.effectiveType === 'slow-2g' || 
+                    navigator.connection.effectiveType === '2g' ||
+                    navigator.connection.saveData);
+        }
+
+        // Cargar y configurar video automáticamente al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            videoElement = document.getElementById('introVideoElement');
+            const audioActivation = document.getElementById('audioActivation');
+            
+            // URLs posibles para el video (priorizando local)
+            const videoUrls = [
+                '/video/intro',
+                'https://1drv.ms/v/c/82d1fdc5c5085fdb/Ea-aQlh2Qe9Gh-HPISiBX18BhOT49CWmSTgwoTTl8PgHnw?download=1'
+            ];
+            
+            let currentUrlIndex = 0;
+            let videoReady = false;
+            
+            function tryLoadVideo() {
+                if (currentUrlIndex < videoUrls.length) {
+                    console.log('Cargando video desde:', videoUrls[currentUrlIndex]);
+                    videoElement.src = videoUrls[currentUrlIndex];
+                    
+                    // Para móviles, cargar solo metadata inicial
+                    if (isMobile()) {
+                        videoElement.preload = 'metadata';
+                    }
+                } else {
+                    console.log('No se pudo cargar el video, mostrando formulario');
+                    showForm();
+                }
+            }
+            
+            // Establecer la fuente inicial del video
+            tryLoadVideo();
+            
+            // Timeout de seguridad: más tiempo para móviles
+            const timeoutDuration = isMobile() ? 25000 : 20000;
+            setTimeout(function() {
+                if (!audioActivated && !videoReady) {
+                    console.log('Timeout de emergencia alcanzado, mostrando formulario');
+                    showForm();
+                }
+            }, timeoutDuration);
+            
+            // Eventos del video optimizados para móviles
+            videoElement.addEventListener('loadstart', function() {
+                console.log('Iniciando carga del video');
+            });
+
+            videoElement.addEventListener('loadedmetadata', function() {
+                console.log('Metadata del video cargada');
+                videoReady = true;
+                
+                // Para conexiones lentas, no hacer precarga
+                if (isSlowConnection()) {
+                    console.log('Conexión lenta detectada, saltando precarga');
+                    return;
+                }
+            });
+            
+            // Optimización: usar canplaythrough para mejor buffer en móviles
+            videoElement.addEventListener('canplaythrough', function() {
+                console.log('Video completamente cargado y listo');
+                videoReady = true;
+                
+                // Solo hacer precarga si no es conexión lenta
+                if (!audioActivated && !isSlowConnection()) {
+                    // Para móviles, precarga más conservadora
+                    if (isMobile()) {
+                        // Solo preparar pero no reproducir
+                        videoElement.load();
+                    } else {
+                        // Desktop: precarga normal
+                        videoElement.play().then(() => {
+                            setTimeout(() => {
+                                if (!audioActivated) {
+                                    videoElement.pause();
+                                    videoElement.currentTime = 0;
+                                }
+                            }, 100);
+                        }).catch((error) => {
+                            console.log('Error al precargar video:', error);
+                        });
+                    }
+                }
+            });
+
+            // Evento de progreso para mostrar estado de carga
+            videoElement.addEventListener('progress', function() {
+                if (videoElement.buffered.length > 0) {
+                    const bufferedEnd = videoElement.buffered.end(videoElement.buffered.length - 1);
+                    const duration = videoElement.duration;
+                    if (duration > 0) {
+                        const percentLoaded = (bufferedEnd / duration) * 100;
+                        console.log(`Video cargado: ${percentLoaded.toFixed(1)}%`);
+                    }
+                }
+            });
+            
+            videoElement.addEventListener('playing', function() {
+                console.log('Video reproduciéndose');
+            });
+
+            videoElement.addEventListener('waiting', function() {
+                console.log('Video esperando más datos...');
+            });
+
+            videoElement.addEventListener('stalled', function() {
+                console.log('Carga del video bloqueada');
+            });
+            
+            videoElement.addEventListener('error', function(e) {
+                console.log('Error al cargar video desde URL:', videoUrls[currentUrlIndex], e);
+                currentUrlIndex++;
+                
+                if (currentUrlIndex < videoUrls.length) {
+                    console.log('Probando siguiente URL...');
+                    setTimeout(() => tryLoadVideo(), 1000); // Pequeña pausa antes de reintentar
+                } else {
+                    console.log('Todas las URLs fallaron, mostrando formulario');
+                    showForm();
+                }
+            });
+            
+            // Detectar si el usuario toca la pantalla en móviles
+            videoElement.addEventListener('click', function() {
+                if (!audioActivated) {
+                    enableAudioAndPlay();
+                }
+            });
+
+            // Para móviles: optimizar reproductores
+            if (isMobile()) {
+                videoElement.addEventListener('canplay', function() {
+                    // En móviles, marcar como listo pero no precargar agresivamente
+                    videoReady = true;
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

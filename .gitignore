@@ -1,0 +1,12 @@
+# Archivos de video grandes
+*.mov
+*.mp4
+*.avi
+*.mkv
+uploads/*.mov
+uploads/*.mp4
+
+# Archivos temporales
+*.tmp
+*.bak
+*_backup.* 
